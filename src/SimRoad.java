@@ -4,7 +4,7 @@ public class SimRoad {
 
         double arrivalRate = 1.0;
         double slowdownRate = 0.3;
-        double cutinRate = 0.00;
+        double cutinRate = 0.01;
 
         for(int n = 0; n < 100; n++) {
             road.update(arrivalRate, slowdownRate, cutinRate);

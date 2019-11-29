@@ -8,7 +8,7 @@ public class Road {
     private Car[] cars = null; //cars on the road
     private int numCars = 0; // number of cars on the road
     private int numCutin = 0; // number of line cutters on the road
-    private int tripTime = 0; //trip time of the last car the exits
+    private int tripTime = 0; // trip time of the last car the exits
     private int tripDist = 0; // trip distance of the last car the exits
     private Random rand = new Random();
 
@@ -16,7 +16,7 @@ public class Road {
     // create a road with DEFAULT_LENGTH
     public Road() {
         cars = new Car[DEFAULT_LENGTH];
-        for(int i = 0; i < DEFAULT_LENGTH; i++)
+        for (int i = 0; i < DEFAULT_LENGTH; i++)
             cars[i] = null;
 
         toString();
@@ -25,23 +25,65 @@ public class Road {
     // create a road with the specified length
     public Road(int length) {
         cars = new Car[length];
-        for(int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
             cars[i] = null;
-
         toString();
+    }
+
+    public void moveCars() {
+        for (int k = this.cars.length - 1; k >= 0; k--) { //모든 차들 이동
+            if (this.cars[k] != null) {
+                this.cars[k].move();
+                if (this.cars[k].getPos() >= DEFAULT_LENGTH) {
+                    tripTime = cars[k].getTime();
+                    tripDist = cars[k].getDist();
+                    this.cars[k] = null;
+
+                } else {
+                    if (this.cars[k].getPos() != k) {
+                        this.cars[this.cars[k].getPos()] = this.cars[k];
+                        this.cars[k] = null;
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateSpeed(double slowDownRate) {
+
+        for (int i = 0; i < this.cars.length; i++) {// 모든 차들 속도 업데이트
+            if (this.cars[i] != null) {
+                for (int j = 1; j <= 5; j++)
+                    if (i + j <= 199 && this.cars[i + j] != null) {
+                        this.cars[i].setFrontCar(this.cars[i + j]);
+                        break;
+                    }
+                this.cars[i].updateSpeed(slowDownRate);
+            }
+        }
+
     }
 
     // Update the road
     public void update(double arrivalRate, double slowdownRate, double cutinRate) {
-        for(int k = this.cars.length-1; k >= 0; k--)  //모든 차들 이동
-            this.cars[k].move();
-        if(cars[0] == null)
+        updateSpeed(slowdownRate);
+        moveCars();
+//        double random_param = rand.nextDouble();
+//        if (slowdownRate > random_param) {
+//            //TODO SLOW DOWN SPEED
+//        }
+
+        if (cars[0] == null && arrivalRate >= (Math.random()))
             cars[0] = new Car();
-        for(int i = 0; i < this.cars.length; i++) {// 모든 차들 속도 업데이트
-            for (int j = 1; j <= 5; j++)
-                if (i + j <= 199 && this.cars[i + j] != null)
-                    this.cars[i].setFrontCar(this.cars[i + j]);
-            this.cars[i].updateSpeed(0.3);
+        else if (cutinRate >= (Math.random())) {
+            int last_idx = 0;
+            for (int k = this.cars.length - 1; k >= 0; k--) {
+                if (this.cars[k] != null) {
+                    last_idx = k;
+                    break;
+                }
+            }
+            getRandomCar(last_idx);
         }
 
 
@@ -60,30 +102,48 @@ public class Road {
 //    }
 
     //return the number of cars on the road
+
+    public void getRandomCar(int bound) {
+        int random_idx = rand.nextInt(bound);
+        if (cars[random_idx] == null) {
+            cars[random_idx] = new Car(random_idx);
+        } else {
+            getRandomCar(bound);
+        }
+    }
+
     public int getNumCars() {
         int cnt = 0;
-        for(int i = 0; i < this.cars.length; i++)
-            if(this.cars[i] != null)
+        for (int i = 0; i < this.cars.length; i++)
+            if (this.cars[i] != null)
                 cnt++;
         return cnt;
     }
 
     //return the number of line cutters on the road
     public int getNumCutin() {
-        return 0;
+        int cnt = 0;
+//        for (int i = 0; i < this.cars.length; i++)
+//            if (this.cars[i].isLineCutter() == true)
+//                cnt++;
+        return cnt;
     }
 
     //return the trip time of the last car that exits
-//    public int getTripTime() {}
+    public int getTripTime() {
+        return tripTime;
+    }
 
     //return the trip distance of the last car that exits
-//    public int getTripDist() {}
+    public int getTripDist() {
+        return tripDist;
+    }
 
     // return a string representation
     public String toString() {
         String road = "";
-        for(int i = 0; i <this.cars.length; i++)
-            if(this.cars[i] == null)
+        for (int i = 0; i < this.cars.length; i++)
+            if (this.cars[i] == null)
                 road += ' ';
             else
                 road += this.cars[i];
