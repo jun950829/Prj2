@@ -6,8 +6,9 @@ class SimRoadFrame extends JFrame {
 
     public SimRoadFrame() {
 
+
         JPanel Northpanel = new JPanel();
-        Northpanel.setLayout(new GridLayout(2, 4));
+//        Northpanel.setLayout(new GridLayout(2, 4));
 
         JPanel southPanel = new JPanel();
         JButton ResetButton = new JButton("Reset");
@@ -17,7 +18,7 @@ class SimRoadFrame extends JFrame {
         southPanel.add(RunButton);
 
         add(southPanel);
-        add(Northpanel);
+//        add(Northpanel);
 
 
     }

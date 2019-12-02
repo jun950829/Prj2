@@ -66,25 +66,41 @@ public class Road {
 
     // Update the road
     public void update(double arrivalRate, double slowdownRate, double cutinRate) {
+        int rand_car = 0;
+        int rear = 0;
+        int front = 0;
         updateSpeed(slowdownRate);
         moveCars();
-//        double random_param = rand.nextDouble();
-//        if (slowdownRate > random_param) {
-//            //TODO SLOW DOWN SPEED
-//        }
+
 
         if (cars[0] == null && arrivalRate >= (Math.random()))
             cars[0] = new Car();
-        else if (cutinRate >= (Math.random())) {
-            int last_idx = 0;
-            for (int k = this.cars.length - 1; k >= 0; k--) {
-                if (this.cars[k] != null) {
-                    last_idx = k;
+
+        while ( front - rear > 1) {
+        rear = rand.nextInt(198);
+
+            for (int l = rear + 1; l <= 199; l++) {
+                if (cars[l] != null) {
+                    l = front;
                     break;
                 }
             }
-            getRandomCar(last_idx);
         }
+
+        rand_car = cutInLine(rear, front, cutinRate);
+        if(rand_car != -1)
+         cars[rand_car] = new Car(rand_car);
+
+//        else if (cutinRate >= (Math.random())) {
+//            int last_car = 0;
+//            for (int k = this.cars.length - 1; k >= 0; k--) {
+//                if (this.cars[k] != null) {
+//                    last_car = k;
+//                    break;
+//                }
+//            }
+//            getRandomCar(last_car);
+//        }
 
 
 
@@ -98,10 +114,14 @@ public class Road {
     // cut in randomly with the rate of cutinRate
 // return a random position between rear and front if a car cuts in,
 // or return -1 if no car cuts in
-//    private int cutInLine(int rear, int front, double cutinRate) {
-//    }
+    private int cutInLine(int rear, int front, double cutinRate) {
+        if ((cutinRate >= (Math.random()))) {
+            int rand_car = (int) (Math.random() * (front - rear + 1)) + rear;
+            return rand_car;
+        } else
+            return -1;
+    }
 
-    //return the number of cars on the road
 
     public void getRandomCar(int bound) {
         int random_idx = rand.nextInt(bound);
@@ -112,6 +132,7 @@ public class Road {
         }
     }
 
+    //return the number of cars on the road
     public int getNumCars() {
         int cnt = 0;
         for (int i = 0; i < this.cars.length; i++)
@@ -122,11 +143,11 @@ public class Road {
 
     //return the number of line cutters on the road
     public int getNumCutin() {
-        int cnt = 0;
-//        for (int i = 0; i < this.cars.length; i++)
-//            if (this.cars[i].isLineCutter() == true)
-//                cnt++;
-        return cnt;
+        int cnt2 = 0;
+        for (int i = 0; i < this.cars.length; i++)
+            if (this.cars[i] != null && this.cars[i].isLineCutter())
+                cnt2++;
+        return cnt2;
     }
 
     //return the trip time of the last car that exits
@@ -154,6 +175,10 @@ public class Road {
 //    //  width: length * carsize , height: carsize
 //    //  car color
 //    //usingPhone : blue, lineCutter : red, others: gray
-//    public void paint (Graphics g, int y, int carsize) {
-//    }
+    public void paint (Graphics g, int y, int carsize) {
+        g.drawRect(50, 50, length * carsize, carsize);
+        g.setColor(Color.gray);
+        g.fillRect(50, 50, length * carsize, carsize);
+
+    }
 }
