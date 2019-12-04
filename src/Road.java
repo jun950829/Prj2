@@ -77,11 +77,11 @@ public class Road {
             cars[0] = new Car();
 
         while ( front - rear > 1) {
-        rear = rand.nextInt(198);
+        rear = rand.nextInt(197)+1;
 
             for (int l = rear + 1; l <= 199; l++) {
                 if (cars[l] != null) {
-                    l = front;
+                    front = l;
                     break;
                 }
             }
@@ -90,19 +90,6 @@ public class Road {
         rand_car = cutInLine(rear, front, cutinRate);
         if(rand_car != -1)
          cars[rand_car] = new Car(rand_car);
-
-//        else if (cutinRate >= (Math.random())) {
-//            int last_car = 0;
-//            for (int k = this.cars.length - 1; k >= 0; k--) {
-//                if (this.cars[k] != null) {
-//                    last_car = k;
-//                    break;
-//                }
-//            }
-//            getRandomCar(last_car);
-//        }
-
-
 
         // each car updates speed and moves
         //if a normal car exits, record its trip time and trip distance
@@ -116,20 +103,10 @@ public class Road {
 // or return -1 if no car cuts in
     private int cutInLine(int rear, int front, double cutinRate) {
         if ((cutinRate >= (Math.random()))) {
-            int rand_car = (int) (Math.random() * (front - rear + 1)) + rear;
+            int rand_car = (int) (Math.random() * (front - rear)+1) + rear;
             return rand_car;
         } else
             return -1;
-    }
-
-
-    public void getRandomCar(int bound) {
-        int random_idx = rand.nextInt(bound);
-        if (cars[random_idx] == null) {
-            cars[random_idx] = new Car(random_idx);
-        } else {
-            getRandomCar(bound);
-        }
     }
 
     //return the number of cars on the road

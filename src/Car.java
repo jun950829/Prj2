@@ -54,19 +54,10 @@ public class Car {
     //a car randomly slows down by 1
     //     usingPhone = true, speed > 1
     public void updateSpeed(double slowdownRate) {
-        if (slowdownRate < Math.random()) {
-            if (this.speed >= MAXSPEED) //속도가 5이상이면 5로 고정 , 아니면 +1
-                speed = 5;
-            else
-                speed += 1;
-        } else {
-//                System.out.println( "발생!");
-                if (this.speed != 0) {
-                    this.speed -= 1;
-                } else {
-                    this.speed = 0;
-            }
-        }
+        if (this.speed >= MAXSPEED) //속도가 5이상이면 5로 고정 , 아니면 +1
+            speed = 5;
+        else
+            speed += 1;
 
         if (this.frontCar != null) {
             int d = this.frontCar.getPos() - this.getPos();  //앞차와의 거리 pos 반환
@@ -75,13 +66,16 @@ public class Car {
             this.frontCar = null;
         }
 
-
+        if (slowdownRate >= Math.random()) {
+            this.usingPhone = true;
+                this.speed = 1;
+        } else
+            this.usingPhone = false;
     }
 
     //move the car
     public void move() {
         //빈 객체가 아니라면 이 객체의 스피드만큼 이동, 빈 객체면 통과
-//        System.out.println(this + " 이 차의 속도 " + speed);
         this.position = this.position + this.speed;
         time++; //한번 움직였으니 1초추가
         distance = position;
